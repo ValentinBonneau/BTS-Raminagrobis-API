@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RaminagrobisBTS.DTO;
 using RaminagrobisBTS.Metier;
 
@@ -53,7 +52,7 @@ namespace RaminagrobisBTS.API.Controllers
             }
         }
 
-        // POST: AdherentController/Edit/5
+        // Patch: AdherentController/Edit/5
         [HttpPatch("{id}")]
         public ActionResult<Adherent_DTO> Edit(int id, [FromForm] Adherent_DTO adherent)
         {
