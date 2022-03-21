@@ -9,7 +9,19 @@ namespace RaminagrobisBTS.DAL.Depot
 
         public override IEnumerable<Reference_DAL> GetAll()
         {
-            throw new NotImplementedException();
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "SELECT * FROM [dbo].[Reference]";
+            var reader = commande.ExecuteReader();
+
+            var reponse = new List<Reference_DAL>();
+
+            while (reader.Read())
+            {
+                reponse.Add(new Reference_DAL(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+            }
+            DetruireConnexionEtCommande();
+            return reponse;
         }
         public int? GetIdByRef(string Ref)
         {

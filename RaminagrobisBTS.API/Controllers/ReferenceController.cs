@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RaminagrobisBTS.Metier;
+using RaminagrobisBTS.DTO;
 
 namespace RaminagrobisBTS.API.Controllers
 {
@@ -36,6 +37,24 @@ namespace RaminagrobisBTS.API.Controllers
                 }
 
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var reponse = new List<Reference_DTO>();
+                foreach (var item in Reference_Metier.GetAll())
+                {
+                    reponse.Add(item.toDTO());
+                }
+                return Ok(reponse);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿using RaminagrobisBTS.DAL.Depot;
 using RaminagrobisBTS.DAL.Model;
+using RaminagrobisBTS.DTO;
 
 namespace RaminagrobisBTS.Metier
 {
@@ -42,6 +43,28 @@ namespace RaminagrobisBTS.Metier
         {
             var depot = new Reference_Depot();
             depot.UnAssoToFournisseur(idFournisseur);
+        }
+
+        public static IEnumerable<Reference_Metier> GetAll()
+        {
+            var depot = new Reference_Depot();
+            var reponse = new List<Reference_Metier>();
+            foreach (var item in depot.GetAll())
+            {
+                reponse.Add(new Reference_Metier(item));
+            }
+            return reponse;
+        }
+
+        public Reference_DTO toDTO()
+        {
+            return new Reference_DTO()
+            {
+                Id = Id,
+                Ref = Ref,
+                Libele = Libele,
+                Marque = Marque
+            };
         }
     }
 }
