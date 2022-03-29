@@ -1,43 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using RaminagrobisBTS.DTO;
+using RaminagrobisBTS.Metier;
 
 namespace RaminagrobisBTS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Fournisseur")]
     [ApiController]
-    public class FournisseurController : ControllerBase
+    public class FournisseurController : Controller
     {
         // GET: api/<FournisseurController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<Fournisseur_DTO>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var reponse = new List<Fournisseur_DTO>();
+            foreach (var item in Fournisseur_Metier.GetAll())
+            {
+                reponse.Add(item.ToDTO());
+            }
+            return Ok(reponse);
+
         }
 
         // GET api/<FournisseurController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Fournisseur_DTO> Get(int id)
         {
-            return "value";
+            try
+            {
+                return Ok(Fournisseur_Metier.GetById(id).ToDTO());
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST api/<FournisseurController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Fournisseur_DTO> Post([FromForm] Fournisseur_DTO fournisseur)
         {
+            try
+            {
+                var fournMetier = new Fournisseur_Metier(fournisseur);
+                fournMetier.CreerEnBDD();
+                return Ok(fournMetier.ToDTO());
+            }
+            catch(Exception ex)
+            {
+                return Conflict(ex);
+            }
         }
 
         // PUT api/<FournisseurController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch("{id}")]
+        public ActionResult<Fournisseur_DTO> Patch(int id, [FromForm] Fournisseur_DTO fournisseur)
         {
-        }
-
-        // DELETE api/<FournisseurController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                var fourn = new Fournisseur_Metier(fournisseur);
+                fourn.Id = id;
+                return Ok(fourn.Modifier().ToDTO());
+            }
+            catch
+            {
+                return Conflict();
+            }
         }
     }
 }
