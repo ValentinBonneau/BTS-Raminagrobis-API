@@ -23,6 +23,30 @@ namespace RaminagrobisBTS.DAL.Depot
             DetruireConnexionEtCommande();
             return reponse;
         }
+
+        public Reference_DAL GetById(int Id)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "SELECT * FROM [dbo].[Reference] where id = @id";
+            commande.Parameters.Add(new SqlParameter("@id",Id));
+
+            var reader = commande.ExecuteReader();
+
+            if (reader.Read())
+            {
+                var reponse = new Reference_DAL(Id, reader.GetString(1), reader.GetString(2),reader.GetString(3));
+                DetruireConnexionEtCommande();
+                return reponse;
+            }
+            else
+            {
+                DetruireConnexionEtCommande();
+                return null;
+            }
+
+            DetruireConnexionEtCommande();
+        }
         public int? GetIdByRef(string Ref)
         {
             CreerConnexionEtCommande();
